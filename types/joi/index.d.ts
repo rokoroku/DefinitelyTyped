@@ -151,7 +151,7 @@ export interface ValidationResult<T> {
 }
 
 export interface SchemaMap {
-    [key: string]: Schema;
+    [key: string]: Schema | SchemaMap;
 }
 
 export interface Schema extends AnySchema<Schema> {
