@@ -1,4 +1,4 @@
-// Type definitions for joi v10.4.2
+// Type definitions for joi v11.0.3
 // Project: https://github.com/hapijs/joi
 // Definitions by: Bart van der Schoor <https://github.com/Bartvds>, Laurence Dougal Myers <https://github.com/laurence-myers>, Christopher Glantschnig <https://github.com/cglantschnig>, David Broder-Rodgers <https://github.com/DavidBR-SW>, Gael Magnan de Bornier <https://github.com/GaelMagnan>, Rytis Alekna <https://github.com/ralekna>, Pavel Ivanov <https://github.com/schfkt>, Youngrok Kim <https://github.com/rokoroku>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -158,7 +158,7 @@ export interface ValidationError extends Error, JoiObject {
 export interface ValidationErrorItem {
     message: string;
     type: string;
-    path: string;
+    path: string[];
     options?: ValidationOptions;
     context?: Context;
 }
@@ -191,6 +191,8 @@ export type Schema = AnySchema
     | LazySchema;
 
 export interface AnySchema extends JoiObject {
+
+    schemaType?: Types | string;
 
     /**
      * Validates a value using the schema and options.
@@ -648,6 +650,7 @@ export interface ArraySchema extends AnySchema {
 }
 
 export interface ObjectSchema extends AnySchema {
+
     /**
      * Sets the allowed object keys.
      */
@@ -1032,7 +1035,23 @@ export function reach<T extends Schema>(schema: ObjectSchema, path: string): T;
  */
 export function extend(extention: Extension): any;
 
-// Below are undocumented APIs. use them at your own risk
+//--------------------------------------------------
+
+import * as Module from '.';
+export type Root = typeof Module;
+export type DefaultsFunction = (root: Schema) => Schema;
+
+/**
+ * Creates a new Joi instance that will apply defaults onto newly created schemas
+ * through the use of the fn function that takes exactly one argument, the schema being created.
+ *
+ * The function must always return a schema, even if untransformed.
+ */
+export function defaults(fn: DefaultsFunction): Root;
+
+//--------------------------------------------------
+// Below are undocumented APIs. use at your own risk
+//--------------------------------------------------
 
 /**
  * Returns a plain object representing the schema's rules and properties
